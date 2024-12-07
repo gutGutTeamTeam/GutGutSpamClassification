@@ -1,6 +1,8 @@
+import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
+from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
@@ -11,11 +13,16 @@ from train.trainer import RNNPlus
 
 df = pd.read_pickle(path_to_source)
 
-X = df[text_name]  # Feature vectors,384 dimensions
-y = df[tag_name]  # Labels (e.g., spam/ham)
+X = df[text_name].to_numpy() # Feature vectors,384 dimensions
+y = df[tag_name].to_numpy() # Labels (e.g., spam/ham)
+X = np.vstack(X)
+X = X.reshape(len(y), max_sentences * dim)
+smote = SMOTE(random_state=42)
+X, y = smote.fit_resample(X, y)
+X = X.reshape(len(y), max_sentences, dim)
 
 test_loss_array = [100]
-while test_loss_array[-1] > 0.13:
+while test_loss_array[-1] > 0.1:
     '''
     ***********************dealing data**********************************
     '''
@@ -47,11 +54,11 @@ while test_loss_array[-1] > 0.13:
     dropout = hp_params['dropout']
 
     # Initialize dataset and dataloader
-    dataset = TextDataset(X_train, y_train, max_sentences, dim)
+    dataset = TextDataset(X_train, y_train, max_sentences, dim, is_test=True)
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle_train)
 
     # Create test dataset and dataloader
-    test_dataset = TextDataset(X_test, y_test, max_sentences, dim, is_test=False)
+    test_dataset = TextDataset(X_test, y_test, max_sentences, dim, is_test=True)
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=shuffle_test)
 
 

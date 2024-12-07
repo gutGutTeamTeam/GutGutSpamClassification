@@ -8,7 +8,6 @@ import pandas
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
-import nltk
 from nltk.tokenize import sent_tokenize
 
 # from config.Globals import ReNewConfig
@@ -23,9 +22,12 @@ def rm_null_from_list(df_list):
 
 def add_null_from_list(df_list):
     len_df = len(df_list)
-    for i in range(max_sentences-len_df):
-        df_list.append(nil)
-    return np.array(df_list,dtype=object)
+    if len_df > max_sentences:
+        return np.array(df_list[:max_sentences],dtype=object)
+    else:
+        for i in range(max_sentences-len_df):
+            df_list.append(nil)
+        return np.array(df_list,dtype=object)
 
 def token_sentence(text):
 
@@ -139,7 +141,7 @@ class CleanUp:
         # sentences = np.concatenate(qwq)
         batch_embeddings = []
         for i in range(0, len(sentences), batch_size):
-            sys.stdout.write(f"\r{i//batch_size + 1} / {len(sentences)//batch_size+1} is training...")
+            sys.stdout.write(f"\r{i//batch_size + 1} / {len(sentences)//batch_size+1} is embedding...")
             sys.stdout.flush()
             batch = (sentences[i:i + batch_size])
             batch_embeddings.extend(embed_batch(batch, num_threads))

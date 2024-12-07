@@ -20,12 +20,12 @@ class RNNPlus :
         self.early_stopping = EarlyStopping(patience=self.stop_patient, delta=self.stop_delta)
         self.early_stopping_flag = False
 
-    def epochs_t_e(self, epochs):
+    def epochs_t_e(self, epochs, num_of_this_run=-1):
 
         train_loss_array = []
-        test_loss_array = []
+        test_avg_loss_array = []
         # sta_glb = None
-        print("\n\n"+"a new training epoch"+"\n\n")
+        print(f"\n\n"+f"a new training scope{num_of_this_run}"+"\n\n")
 
         '''
         *************train*********************** 
@@ -40,47 +40,51 @@ class RNNPlus :
             ****************** evaluate for early stopping **********************
             """
             test_loss, early_stop_flag,_,_ = self.evaluate(self.test_dataloader)
-            test_loss_array.append(test_loss)
+            test_avg_loss_array.append(test_loss)
             if early_stop_flag:
-                return train_loss_array, test_loss_array
+                """train_loss_, _, sta_glb, cm = self.evaluate(self.test_dataloader, calculate=True)
+                print("\n")
+                print(sta_glb)
+                ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["spam", "ham"]).plot()
+
+                return train_loss_array, test_loss_array"""
+                break
 
         """
         *****************evaluation**********************
         """
-        test_loss, _, _,_ = self.evaluate(self.test_dataloader)
-        test_loss_array.append(test_loss)
         fig, axs = plt.subplots(1, 2, figsize=(5, 2.7), layout='constrained')
-        _, cm = plt.subplots(1, 1)
-        if test_loss_array[-1] - 0.5 > 0:
+
+        if test_avg_loss_array[-1] - 0.5 > 0:
             print("\n"+"error train lose"+"\n")
             axs[0].set_title("error train loss")
             axs[1].set_title("log error train loss")
+
 
         else:
             train_loss_, _, sta_glb, cm = self.evaluate(self.test_dataloader, calculate=True)
             print("\n")
             print(sta_glb)
-            ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["spam", "ham"])
-
+            ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["spam", "ham"]).plot()
 
             axs[0].set_title("normal train loss")
             axs[1].set_title("log normal train loss")
 
         axs[0].plot(train_loss_array,label="train_loss")
-        axs[0].plot(test_loss_array,label="test_loss")
+        axs[0].plot(test_avg_loss_array,label="test_loss")
         axs[0].set_xlabel('epochs')
         axs[0].set_ylabel('loss')
         axs[0].legend()
 
         axs[1].plot(train_loss_array,label="train_loss")
-        axs[1].plot(test_loss_array,label="test_loss")
+        axs[1].plot(test_avg_loss_array,label="test_loss")
         axs[1].set_xlabel('epochs')
         axs[1].set_ylabel('loss')
         axs[1].set_yscale('log')
         axs[1].legend()
         plt.show()
 
-        return train_loss_array, test_loss_array
+        return train_loss_array, test_avg_loss_array
 
 
     def train(self):
@@ -110,9 +114,6 @@ class RNNPlus :
         return avg_train_loss
 
     def evaluate(self, test_dataloader,calculate=False):
-
-        # 初始化早停对象
-
 
         self.model.eval()  # 设置模型为评估模式
         running_val_loss = 0.0

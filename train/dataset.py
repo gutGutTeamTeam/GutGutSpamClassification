@@ -45,3 +45,6 @@ class TextDataset(Dataset):
     def __getitem__(self, idx):
         return self.embeddings_[idx], self.labels_[idx]
 
+class SentenceDataset(Dataset):
+    def __init__(self, embeddings_, labels_, max_sentences, dim, is_test=False):
+        super().__init__(embeddings_, labels_, max_sentences, dim, False)

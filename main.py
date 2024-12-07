@@ -1,90 +1,54 @@
-import json
-import tkinter
-from tkinter import messagebox
-
-import numpy as np
+import random
+from flask import Flask, request, jsonify
 import pandas as pd
-import torch
-from torch import tensor
 
-from config.variables import path_to_best_parameter, input_size, num_classes, path_to_trained_model, tag_name, \
-    text_name, max_sentences, dim, ham, spam
-from preprocess.CleanUp import CleanUp
-from train.conv_lstm import RNNClassifier
-from train.dataset import TextDataset
+import basic
+from config.variables import spam, text_name, ham
 
-
-class Main:
-    def __init__(self):
-        with open(path_to_best_parameter) as f:
-            hp_params = json.load(f)
-
-        batch_size = hp_params['batch_size']
-        hidden_size = hp_params['hidden_size']
-        num_epochs = hp_params['num_epochs']
-        num_layers = 2
-        # learning_rate = hp_params['learning_rate']
-        dropout = hp_params['dropout']
-
-        self.model = RNNClassifier(input_size, hidden_size, num_layers, batch_size, num_epochs, num_classes, dropout)
-        self.model.load_state_dict(torch.load(path_to_trained_model))
-        self.df = pd.DataFrame(columns=[tag_name, text_name])
-        self.processed_df = None
-        self.cleanup = CleanUp().cleanup
-        self.map_of_ham = {spam: "spam", ham: "ham"}
-    def input_email(self, raw_emails):
-        if len(self.df) > 100:
-            self.df = self.df.drop(self.df.index[:100])
-        self.df = pd.DataFrame({tag_name: ([0]*(len(raw_emails))), text_name: raw_emails})
+app = Flask(__name__)
+mian = basic.MainGo()
+emails_df = pd.read_csv("./dataset/web_mails.csv")
 
 
-    def process(self):
-        self.processed_df= self.cleanup(self.df,text_name,1)
-        self.df = pd.DataFrame(columns=[tag_name, text_name])
+# Define the API route
+@app.route('/emails', methods=['POST'])
+def classify_email():
+    try:
+        # Get email content from the request
+        data = request.json
+        email_content = data.get('msg', '')#supposed to be list of str
 
-    def evaluate(self):
-        self.model.eval()
-        with torch.no_grad():
-            emails = self.processed_df[text_name].to_numpy()
-            length = len(emails)
-            emails = np.vstack(emails)
-            emails = emails.reshape(length, 34, 384)
-            email_tensor = tensor(emails, dtype=torch.float32)
-            outputs = self.model(email_tensor)
-            predicted = (outputs >= 0.5).long().tolist()
-            predicted = [self.map_of_ham.get(name) for name in predicted]
-            self.processed_df = None
-            return predicted
+        if not email_content:
+            return jsonify({"error": "Email content is required"}), 400
+        mian.input_email(email_content)
+        mian.process()
+        prediction = mian.evaluate()
+        spam_idx = [idx_ for idx_, value_ in enumerate(prediction) if value_ == "spam"]
+        # ham_idx = [idx_ for idx_, value_ in enumerate(prediction) if value_ == "ham"]
+        return jsonify({"spams": spam_idx})
 
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# GET route to retrieve stored emails
+@app.route('/emails', methods=['GET'])
+def get_emails():
+    try:
+        # Get the number of emails to return from the query parameter
+        n = random.randint(1, min(6, len(emails_df)//2))
+
+        sampled_emails = emails_df.sample(n=n)
+        mian.input_email(sampled_emails[text_name])
+        mian.process()
+        label_guess = mian.evaluate()
+        sampled_emails["prediction"] = label_guess
+
+        return jsonify(sampled_emails.to_dict(orient='records'))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__':
-    mian =Main()
-
-
-    root = tkinter.Tk()
-    root.title("简单ui")
-    label = tkinter.Label(root, text = "请输入内容")
-    label.pack(pady=10)
-    entry = tkinter.Entry(root)
-    entry.pack(pady=10)
-    textBox = tkinter.Text(root,width=70,height=20)
-    textBox.pack(pady=20)
-    def show_text():
-        textBox.delete(0, tkinter.END)
-        for index, item in enumerate(mian.evaluate(),start=1):
-            textBox.insert(tkinter.END, f"{index}:{item}\n")
-
-    def on_click():
-        emails = entry.get()
-
-        if emails == "":
-            messagebox.showwarning("input nothing")
-        mian.input_email(emails)
-        mian.process()
-
-
-    button = tkinter.Button(root, text="submit",command=on_click)
-    button.pack(pady=10)
-    root.mainloop()
-
+    app.run(debug=True)

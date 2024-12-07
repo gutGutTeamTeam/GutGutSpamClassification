@@ -23,7 +23,7 @@ class RNNClassifier(nn.Module):
                             padding=2
                             ),
                 nn.ReLU(inplace=True),
-                nn.MaxPool1d(3, stride=1)
+                nn.MaxPool1d(3, stride=2)
                                 )
         # self.fc_ = nn.Linear(hidden_size, hidden_size//2)
         self.rnn = nn.LSTM(input_size // 4, hidden_size, num_layers, batch_first=True, dropout=dropout)

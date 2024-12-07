@@ -15,6 +15,7 @@ path_to_k_fold = rootPath + CONFIG["path_to"]["dataset"] + CONFIG["path_to"]["k_
 path_to_final_train = rootPath + CONFIG["path_to"]["dataset"] + CONFIG["path_to"]["final_train"]
 path_to_final_test = rootPath + CONFIG["path_to"]["dataset"] + CONFIG["path_to"]["final_test"]
 path_to_statistic = rootPath + CONFIG["path_to"][ "dataset"] + CONFIG["path_to"]["statistic"]
+# path_to_emails = rootPath + CONFIG["path_to"]["dataset"] + CONFIG["path_to"]["web_mails"]
 path_to_bert_model = rootPath + CONFIG["path_to"]["bert_model"]
 path_to_best_parameter = rootPath + CONFIG["path_to"]["best_parameter"]
 

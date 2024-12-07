@@ -15,7 +15,9 @@
         "bert_model": "/all-MiniLM-L6-v2",
         "best_parameter": "/model/best_model.json",
 
-        "model_pth": "/model/model.pth"
+        "model_pth": "/model/model.pth",
+
+        "web_mails": "web_mails.csv"
     },
 
     "data":
