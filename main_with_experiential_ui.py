@@ -1,6 +1,7 @@
-import basic
 
-mian = basic.MainGo()
+from aRUn.basic import MainGo
+
+mian = MainGo()
 info = []
 while True:
     info.append(input("input exit to quit."))

@@ -6,7 +6,6 @@ import torch
 from sklearn.metrics import classification_report,confusion_matrix,ConfusionMatrixDisplay
 from train.utils import EarlyStopping
 
-
 class RNNPlus :
     def __init__(self, model, criterion, optimizer, device,dataloader,test_dataloader,stop_delta=0.01, stop_patient=7):
         self.model = model
@@ -25,7 +24,7 @@ class RNNPlus :
         train_loss_array = []
         test_avg_loss_array = []
         # sta_glb = None
-        print(f"\n\n"+f"a new training scope{num_of_this_run}"+"\n\n")
+        print(f"\n\n"+f"a new training scope:{num_of_this_run}"+"\n\n")
 
         '''
         *************train*********************** 

@@ -2,11 +2,11 @@ import random
 from flask import Flask, request, jsonify
 import pandas as pd
 
-import basic
-from config.variables import spam, text_name, ham
+from aRUn.basic import MainGo
+from config.variables import text_name
 
 app = Flask(__name__)
-mian = basic.MainGo()
+mian = MainGo()
 emails_df = pd.read_csv("./dataset/web_mails.csv")
 
 

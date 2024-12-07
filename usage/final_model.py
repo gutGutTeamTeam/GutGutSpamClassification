@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 import pandas as pd
 import torch
@@ -6,7 +8,8 @@ from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
-from config.variables import *
+from config.variables import path_to_source, path_to_trained_model, text_name, tag_name, max_sentences, dim, path_to_best_parameter, \
+    shuffle_train, shuffle_test, num_classes, input_size, device
 from train.conv_lstm import RNNClassifier
 from train.dataset import TextDataset
 from train.trainer import RNNPlus

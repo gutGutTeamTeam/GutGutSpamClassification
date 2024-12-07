@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 import pandas as pd
 import torch.nn as nn
@@ -7,8 +9,9 @@ from sklearn.model_selection import KFold
 from torch import optim
 from torch.utils.data import DataLoader
 
-from config.variables import *
-from train.conv_lstm import RNNClassifier
+from config.variables import path_to_source, text_name, tag_name, max_sentences, dim, path_to_best_parameter, \
+    shuffle_train, shuffle_test, input_size, num_classes, device
+from train.rnnModel import RNNClassifier
 from train.dataset import TextDataset
 from train.trainer import RNNPlus
 
@@ -20,6 +23,8 @@ df = pd.read_pickle(path_to_source)
 
 X = df[text_name].to_numpy() # Feature vectors,384 dimensions
 y = df[tag_name].to_numpy() # Labels (e.g., spam/ham)
+del df
+
 X = np.vstack(X)
 X = X.reshape(len(y), max_sentences * dim)
 smote = SMOTE(random_state=42)

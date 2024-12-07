@@ -1,1 +1,1 @@
-Root_path = '/home/mia/Documents/python/ai/ai' 
+Root_path = '/home/mia/Documents/python/ai/GutGutSpamClassification' 

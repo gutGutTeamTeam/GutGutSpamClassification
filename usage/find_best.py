@@ -50,12 +50,12 @@ def objective(trial):
     # num_layers = trial.suggest_int("num_layers", 2, 3)
     num_layers = 2
 
-    hidden_size = trial.suggest_int("hidden_size", 16, 128, step=16)
-    batch_size = trial.suggest_int("batch_size", 16, 64, step=16) # 后面有依赖
+    hidden_size = trial.suggest_int("hidden_size", 16, 32 , step=16)
+    batch_size = trial.suggest_int("batch_size", 16, 32, step=16) # 后面有依赖
 
-    learning_rate = trial.suggest_float("learning_rate", 1e-5, 5e-1)
-    num_epochs = trial.suggest_int("num_epochs", 40, 70)
-    dropout = trial.suggest_float("dropout", 0.0,0.5, step=0.1)
+    learning_rate = trial.suggest_float("learning_rate", 1e-5, 5e-3)
+    num_epochs = trial.suggest_int("num_epochs", 60, 80)
+    dropout = trial.suggest_float("dropout", 0.0, 0.2, step=0.1)
 
 
     '''
@@ -86,7 +86,7 @@ def objective(trial):
 
 
 study = optuna.create_study(direction="minimize", study_name="hello")
-study.optimize(objective, n_trials=70)
+study.optimize(objective, n_trials=20)
 
 # 输出最佳超参数
 print("Best trial:")

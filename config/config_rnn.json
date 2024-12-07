@@ -13,9 +13,9 @@
         "final_test": "/final_test.pkl",
         "statistic": "/statistic.csv",
         "bert_model": "/all-MiniLM-L6-v2",
-        "best_parameter": "/model/best_model.json",
+        "best_parameter": "/model/best_model_for_rnn.json",
 
-        "model_pth": "/model/model.pth",
+        "model_pth": "/model/model_for_rnn.pth",
 
         "web_mails": "web_mails.csv"
     },
