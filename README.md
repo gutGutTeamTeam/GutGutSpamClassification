@@ -62,6 +62,7 @@ main ==       backend program for web ui
 main_with_experiential_ui ==   python ui  
 
 ## api
+```
 ### GET request to example server
 GET http://127.0.0.1:5000/emails
 Content-Type: application/json
@@ -108,5 +109,6 @@ Connection: close
   ]
 }
 ###
+```
 
 
