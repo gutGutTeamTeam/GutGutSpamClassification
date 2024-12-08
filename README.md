@@ -69,19 +69,26 @@ Content-Type: application/json
 ### response
 HTTP/1.1 200 OK
 Server: Werkzeug/3.1.3 Python/3.12.7
-Date: Sun, 08 Dec 2024 07:18:30 GMT
+Date: Sun, 08 Dec 2024 09:04:16 GMT
 Content-Type: application/json
-Content-Length: 213
+Content-Length: 1186
+Access-Control-Allow-Origin: *
 Connection: close
 
-[
-  {
-    "Label": "spam",
-    "Message": "SIX chances to win CASH! From 100 to 20,000 pounds txt> CSH11 and send to 87575. Cost 150p/day, 6days, 16+ TsandCs apply Reply HL 4 info",
-    "prediction": "spam"
-  }
-]
-
+{
+  "Message": [
+    "Jay says that you're a double-faggot",
+    "Urgent UR awarded a complimentary trip to EuroDisinc Trav, Aco&Entry41 Or £1000. To claim txt DIS to 87121 18+6*£1.50(moreFrmMob. ShrAcomOrSglSuplt)10, LS1 3AJ",
+    "I HAVE A DATE ON SUNDAY WITH WILL!!",
+    "Finished class where are you.",
+    "-PLS STOP bootydelious (32/F) is inviting you to be her friend. Reply YES-434 or NO-434 See her: www.SMS.ac/u/bootydelious STOP? Send STOP FRND to 62468",
+    "Anything lor... U decide...",
+    "Tell where you reached",
+    "URGENT! You have won a 1 week FREE membership in our £100,000 Prize Jackpot! Txt the word: CLAIM to No: 81010 T&C www.dbuk.net LCCLTD POBOX 4403LDNW1A7RW18",
+    "Wow. I never realized that you were so embarassed by your accomodations. I thought you liked it, since i was doing the best i could and you always seemed so happy about \"the cave\". I'm sorry I didn't and don't have more to give. I'm sorry i offered. I'm sorry your room was so embarassing.",
+    "Thanks for your subscription to Ringtone UK your mobile will be charged £5/month Please confirm by replying YES or NO. If you reply NO you will not be charged"
+  ]
+}
 
 ### POST request to example server
 POST http://127.0.0.1:5000/post_emails

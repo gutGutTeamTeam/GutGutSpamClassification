@@ -43,12 +43,15 @@ def get_emails():
         n = 10
 
         sampled_emails = emails_df.sample(n=n)
-        mian.input_email(sampled_emails[text_name])
-        mian.process()
-        label_guess = mian.evaluate()
-        sampled_emails["prediction"] = label_guess
+        sampled_emails.drop(columns="Label", inplace=True)
+        sampled_emails = sampled_emails.to_numpy().reshape(-1)
+        sampled_emails = sampled_emails.tolist()
+        #mian.input_email(sampled_emails[text_name])
+        #mian.process()
+        #label_guess = mian.evaluate()
+        #sampled_emails["prediction"] = label_guess
 
-        return jsonify(sampled_emails.to_dict(orient='records'))
+        return jsonify({"Message":sampled_emails})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
