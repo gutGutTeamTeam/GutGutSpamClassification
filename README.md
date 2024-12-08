@@ -61,4 +61,52 @@ aRun ==       dao and services for backends?
 main ==       backend program for web ui  
 main_with_experiential_ui ==   python ui  
 
+## api
+### GET request to example server
+GET http://127.0.0.1:5000/emails
+Content-Type: application/json
+### response
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.3 Python/3.12.7
+Date: Sun, 08 Dec 2024 07:18:30 GMT
+Content-Type: application/json
+Content-Length: 213
+Connection: close
+
+[
+  {
+    "Label": "spam",
+    "Message": "SIX chances to win CASH! From 100 to 20,000 pounds txt> CSH11 and send to 87575. Cost 150p/day, 6days, 16+ TsandCs apply Reply HL 4 info",
+    "prediction": "spam"
+  }
+]
+
+
+### POST request to example server
+POST http://127.0.0.1:5000/emails
+Content-Type: application/json
+
+{
+  "content": [
+    "msg1",
+    "msg2",
+    "07732584351 - Rodger Burns - MSG = We tried to call you re your reply to our sms for a free nokia mobile + free camcorder. Please call now 08000930705 for delivery tomorrow"
+  ]
+}
+
+### response
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.3 Python/3.12.7
+Date: Sun, 08 Dec 2024 07:18:30 GMT
+Content-Type: application/json
+Content-Length: 27
+Connection: close
+
+{
+  "spams": [
+    2
+  ]
+}
+###
+
 

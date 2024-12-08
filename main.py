@@ -16,7 +16,7 @@ def classify_email():
     try:
         # Get email content from the request
         data = request.json
-        email_content = data.get('msg', '')#supposed to be list of str
+        email_content = data.get('content', '')#supposed to be list of str
 
         if not email_content:
             return jsonify({"error": "Email content is required"}), 400
