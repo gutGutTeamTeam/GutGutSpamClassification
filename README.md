@@ -64,7 +64,7 @@ main_with_experiential_ui ==   python ui
 ## api
 ```
 ### GET request to example server
-GET http://127.0.0.1:5000/emails
+GET http://127.0.0.1:5000/get_emails
 Content-Type: application/json
 ### response
 HTTP/1.1 200 OK
@@ -84,7 +84,7 @@ Connection: close
 
 
 ### POST request to example server
-POST http://127.0.0.1:5000/emails
+POST http://127.0.0.1:5000/post_emails
 Content-Type: application/json
 
 {

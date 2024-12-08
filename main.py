@@ -1,17 +1,19 @@
 import random
 from flask import Flask, request, jsonify
 import pandas as pd
+from flask_cors import CORS
 
 from aRUn.basic import MainGo
 from config.variables import text_name
 
 app = Flask(__name__)
+CORS(app)
 mian = MainGo()
 emails_df = pd.read_csv("./dataset/web_mails.csv")
 
 
 # Define the API route
-@app.route('/emails', methods=['POST'])
+@app.route('/post_emails', methods=['POST'])
 def classify_email():
     try:
         # Get email content from the request
@@ -33,11 +35,12 @@ def classify_email():
 
 
 # GET route to retrieve stored emails
-@app.route('/emails', methods=['GET'])
+@app.route('/get_emails', methods=['GET'])
 def get_emails():
     try:
         # Get the number of emails to return from the query parameter
-        n = random.randint(1, min(6, len(emails_df)//2))
+        # n = random.randint(1, min(6, len(emails_df)//2))
+        n = 10
 
         sampled_emails = emails_df.sample(n=n)
         mian.input_email(sampled_emails[text_name])
